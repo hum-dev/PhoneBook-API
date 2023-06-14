@@ -1,5 +1,5 @@
 import express from 'express';
-//sta
+//start express
 
 import config from './src/db/config.js';
 import { userRoutes } from './src/Routes/userRoutes.js';
