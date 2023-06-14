@@ -1,11 +1,12 @@
 import express from 'express';
-// import userRoutes from './src/Routes/userRoutes.js';
+//sta
 
 import config from './src/db/config.js';
 import { userRoutes } from './src/Routes/userRoutes.js';
 
 
 const app = express();
+//add middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 userRoutes(app);
