@@ -3,7 +3,7 @@ import assert from 'assert';
 
 dotenv.config();
 
-const {PORT, HOST, HOST_URL, SQL_USER, SQL_PASSWORD, SQL_DATABASE, SQL_SERVER} = process.env;
+const {PORT, HOST, HOST_URL, SQL_USER, SQL_PASSWORD, SQL_DATABASE, SQL_SERVER, JWT_SECRET} = process.env;
 const SQL_ENCRYPT = process.env.SQL_ENCRYPT === 'true';
 
 
@@ -27,6 +27,7 @@ const config = {
 
         }
     },
+    jwt_secret: JWT_SECRET
 };
 
 export default config;

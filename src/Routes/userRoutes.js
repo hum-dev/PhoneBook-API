@@ -1,4 +1,5 @@
-import { getUsers, createUsers, getUser, updateUser, deleteUser  } from "../Controllers/userController.js";
+import { getUsers, createUsers, getUser, updateUser, deleteUser,  } from "../Controllers/userController.js";
+import { registerUser } from "../Controllers/authController.js";
 
 export const userRoutes = (app) => {
 
@@ -12,7 +13,8 @@ export const userRoutes = (app) => {
         .get(getUser)
         .put(updateUser)
         .delete(deleteUser);
-        
+      // register user route
+    app.route("/auth/register").post(registerUser); 
 
 }
 
