@@ -13,8 +13,7 @@ export const userRoutes = (app) => {
         .get(getUser)
         .put(updateUser)
         .delete(deleteUser);
-      // register user route
-    app.route("/auth/register").post(registerUser); 
+        
 
 }
 
