@@ -10,3 +10,4 @@
 
 .pnp.js
 env
+*request.rest

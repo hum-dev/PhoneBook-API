@@ -7,7 +7,7 @@ export const getUsers = async (req, res) => {
   try {
     let pool = await sql.connect(config.sql);
     const result = await pool.request().query("SELECT * FROM PhoneUser");
-    res.status(200).json(result.recordset);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   } finally {
@@ -86,33 +86,76 @@ export const createUsers = async (req, res) => {
 };
 
 //update user
+// export const updateUser = async (req, res) => {
+//   const { id } = req.params;
+//   const { full_name, group_id } = req.body;
+
+//   try {
+//     let pool = await sql.connect(config.sql);
+
+//     // check if user already exists - Samuel
+//     const checkQuery = await pool
+//       .request()
+//       .input("id", sql.Int, id)
+//       .input("full_name", sql.VarChar, full_name)
+//       .input("group_id", sql.Int, group_id)
+//       .query(
+//         "SELECT * FROM PhoneUser WHERE user_id = @id AND (full_name = @full_name OR group_id = @group_id)"
+//       );
+//     if (checkQuery.recordset.length > 0) {
+//       return res.status(400).json({ message: "User already exists!" });
+//     }
+//     const result = await pool
+//       .request()
+//       .input("id", sql.Int, id)
+//       .input("full_name", sql.VarChar, full_name)
+//       .input("group_id", sql.Int, group_id)
+//       .query(
+//         "UPDATE PhoneUser SET full_name = @full_name, group_id = @group_id  WHERE user_id = @id"
+//       );
+//     res.status(200).json({ message: "User updated successfully!" });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   } finally {
+//     sql.close();
+//   }
+// };
+
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { full_name, group_id } = req.body;
+  const { full_name, mobile_number, work_number, email, home_address, group_id } = req.body;
 
   try {
     let pool = await sql.connect(config.sql);
 
-    // check if user already exists - Samuel
+    // Check if user exists by id
     const checkQuery = await pool
       .request()
       .input("id", sql.Int, id)
-      .input("full_name", sql.VarChar, full_name)
-      .input("group_id", sql.Int, group_id)
-      .query(
-        "SELECT * FROM PhoneUser WHERE user_id != @id AND (full_name = @full_name OR group_id = @group_id)"
-      );
-    if (checkQuery.recordset.length > 0) {
-      return res.status(400).json({ message: "User already exists!" });
+      .query("SELECT * FROM PhoneUser WHERE user_id = @id");
+
+    if (checkQuery.recordset.length === 0) {
+      return res.status(400).json({ message: "User not found!" });
     }
-    const result = await pool
+
+   
+    const updateQuery = await pool
       .request()
       .input("id", sql.Int, id)
       .input("full_name", sql.VarChar, full_name)
+      .input("mobile_number", sql.VarChar, mobile_number)
+      .input("work_number", sql.VarChar, work_number)
+      .input("email", sql.VarChar, email)
+      .input("home_address", sql.VarChar, home_address)
       .input("group_id", sql.Int, group_id)
       .query(
-        "UPDATE PhoneUser SET full_name = @full_name, group_id = @group_id  WHERE user_id = @id"
+        "UPDATE PhoneUser SET full_name = @full_name, mobile_number = @mobile_number, work_number = @work_number, email = @email, home_address = @home_address, group_id = @group_id WHERE user_id = @id"
       );
+
+    if (updateQuery.rowsAffected[0] === 0) {
+      return res.status(400).json({ message: "User update failed!" });
+    }
+
     res.status(200).json({ message: "User updated successfully!" });
   } catch (error) {
     res.status(500).json({ message: error.message });
