@@ -27,6 +27,7 @@ const config = {
 
         }
     },
+    jwt_secret: JWT_SECRET
 };
 
 export default config;
